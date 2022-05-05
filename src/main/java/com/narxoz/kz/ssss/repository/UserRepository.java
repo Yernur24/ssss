@@ -5,52 +5,30 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-public interface UserRepository extends JpaRepository<User,Long> {
-     ///1 esep ------------------------------
 
-    List <User> findByEmailContainingOrderByNameDesc(String email);
-      //2 esep -----------------------------
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    List<User> findByNameStartingWith(String name);
-    //3 esep--------------------------
+    User findByUsername(String username);
 
-    List<User> findBySurnameContaining(String surname);
-      // example surname sort
+    /** Jpa Methods */
 
-    @Query(value="select *from users order by surname asc" , nativeQuery = true)
-    List<User> findUserByCustomQuery(String surname);
-           //example id ----------------------
+    // find top 2 users where name starts with `name`
+    List<User> findTop2ByNameStartsWith(String name);
 
-    @Query(value="select *from users where id> :qid" , nativeQuery = true)
-    List<User> findGreaterId(Long qid);
-     //4 esep ----------------------
+    // find users by name and surname (?1, ?2)
+    List<User> findByNameAndSurname(String name, String surname);
 
-    @Query(value="select *from users order by id asc " , nativeQuery = true)
-    List<User> findByIdOrderById(Long id);
+    // find users where email contains `email` sorted by surname (asc)
+    List<User> findFirstByEmailContainingOrderBySurname(String email);
 
-    //5 esep-----------------------------
+    /** Native Query */
 
-    @Query(value= "select *from users order by id desc limit(2)", nativeQuery = true)
-    List<User> findshowlastUsers();
-    //6  esep -----------------
+    // find users where name starts with `A` order by surname (asc)
+    @Query(value = "select * from users where name like 'A%' order by surname", nativeQuery = true)
+    List<User> findAllSorted();
 
-    @Query(value= "select *from users order by name desc", nativeQuery = true)
-    List<User> sortByName();
+    // find users where id greater than `qid`
+    @Query(value = "select * from users where id > :qid", nativeQuery = true)
+    List<User> findByGreaterId(Long qid);
 
-     // 7 esep ----------------------
-    @Query( value="select *from users where email not like'%@%'", nativeQuery = true)
-     List <User> findByEmailNotContaining(String email2);
-
-    // 8
-      @Query(value= "select *from users where name=surname",nativeQuery = true)
-      List<User>EqualNameSurname(String name1);
-
-     //9
-@Query(value= "select *from users where email like '%narxoz.kz%' or email like '%gmail.com%' or email like '%yandex.ru%' ",
-        nativeQuery = true)
-List<User> emailLike();
- //10
-  @Query(value="select distinct on (name) * from users ", nativeQuery = true)
-    List<User> findDistinctByName();
 }
-

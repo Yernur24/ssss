@@ -1,60 +1,38 @@
 package com.narxoz.kz.ssss.model;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-
+import java.util.Set;
 
 @Entity
-@Table (name="users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     private String name;
+
     private String surname;
+
     private String email;
-    public User() {
-    }
 
-    public User(int id, String name, String surname,String email) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email=email;
-    }
+    private String username;
 
-    public long getId() {
-        return id;
-    }
+    private String password;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @Transient
+    private String passwordConfirm;
 
-    public String getName() {
-        return name;
-    }
+    @ManyToMany
+    private Set<Role> roles;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    @Override
-    public String toString() {
-        return " [id=" + id + ", name=" + name + ", surname=" + surname + ", Email=" + email + "]";
-    }
 }
